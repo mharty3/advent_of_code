@@ -2,7 +2,7 @@ import numpy as np
 
 def parse(input_data):
     rows = input_data.strip().split('\n')
-    a = np.array([list(row) for row in rows])
+    a = np.array([list(row.strip()) for row in rows])
     return np.where(a=='#', 1, 0)
 
 
@@ -26,16 +26,16 @@ if __name__ == "__main__":
     from aocd.models import Puzzle
 
     test_input = """..##.......
-#...#...#..
-.#....#..#.
-..#.#...#.#
-.#...##..#.
-..#.##.....
-.#.#.#....#
-.#........#
-#.##...#...
-#...##....#
-.#..#...#.#"""
+    #...#...#..
+    .#....#..#.
+    ..#.#...#.#
+    .#...##..#.
+    ..#.##.....
+    .#.#.#....#
+    .#........#
+    #.##...#...
+    #...##....#
+    .#..#...#.#"""
 
     other_paths = [(1, 1),
                 (3, 1),
