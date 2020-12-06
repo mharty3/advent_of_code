@@ -1,9 +1,8 @@
-import numpy as np
 from collections import Counter
 
 def solve1(input_data):
     groups = input_data.split('\n\n')
-    return np.sum([len(set(group).difference(set('\n'))) for group in groups])
+    return sum([len(set(group).difference(set('\n'))) for group in groups])
 
 def solve2(input_data):
     groups = input_data.split('\n\n')
@@ -11,7 +10,7 @@ def solve2(input_data):
     counters = [Counter(g.replace('\n', '')) for g in groups] # count of each non new line char in each group
     
     # for each group, find the number of times a char count equals the member count
-    return np.sum([list(c.values()).count(gs) for gs, c in zip(group_size, counters)])
+    return sum([list(c.values()).count(gs) for gs, c in zip(group_size, counters)])
 
 test_data = """abc
 
