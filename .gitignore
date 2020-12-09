@@ -130,3 +130,5 @@ dmypy.json
 
 # Ignore my scratch space notebook
 Sandbox.ipynb
+
+.vscode
