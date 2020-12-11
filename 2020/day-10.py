@@ -1,6 +1,3 @@
-from os import kill
-
-
 def solve1(input_data):
     adapters = [int(i.strip()) for i in input_data.split()]
     adapters.sort()
