@@ -1,35 +1,34 @@
+from math import sin, cos, radians
+
+
 class Ferry:
     def __init__(self):
         self.x = 0
         self.y = 0
-        self.bearing = 90  # ship is facing east
-        self.cardinal_bearing = "E"
-        self.CARDINAL_DIRECTIONS = {0: "N", 90: "E", 180: "S", 270: "W"}
+        self.bearing = 0  # ship is facing east
+        self.CARDINAL_DIRECTIONS = {"N": 90, "E": 0, "S": 180, "W": 270}
 
     def rotate(self, direction, angle):
+        # ccw is positive
         if direction == "L":
-            self.bearing -= angle
-        elif direction == "R":
             self.bearing += angle
+        elif direction == "R":
+            self.bearing -= angle
         self.bearing = self.bearing % 360
-        self.cardinal_bearing = self.CARDINAL_DIRECTIONS[self.bearing]
 
-    def move(self, direction, distance):
-        directions = {"N": ("y", 1), "S": ("y", -1), "E": ("x", 1), "W": ("x", -1)}
-        coord, factor = directions[direction]
-        if coord == "y":
-            self.y += factor * distance
-        elif coord == "x":
-            self.x += factor * distance
+    def move(self, bearing, distance):
+        self.x += round(cos(radians(bearing))) * distance
+        self.y += round(sin(radians(bearing))) * distance
 
     def execute_instruction(self, instruction):
         action, value = instruction[0], int(instruction[1:])
         if action in "LR":
             self.rotate(action, value)
         elif action == "F":
-            self.move(self.cardinal_bearing, value)
+            self.move(self.bearing, value)
         elif action in "NSEW":
-            self.move(action, value)
+            bearing = self.CARDINAL_DIRECTIONS[action]
+            self.move(bearing, value)
 
 
 def solve1(input_data):
