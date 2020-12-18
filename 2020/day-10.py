@@ -1,4 +1,5 @@
 from itertools import chain, combinations
+from os import terminal_size
 
 
 def solve1(input_data):
@@ -8,6 +9,27 @@ def solve1(input_data):
     return (diffs.count(1) + 1) * (diffs.count(3) + 1)
 
 
+def solve2_dynamic_programming(input_data):
+    """this is a better solution using dynamic programming, a concept that is new to me"""
+    adapters = {int(i.strip()) for i in input_data.split()}
+    n_ways = [0] * max(adapters)
+
+    if 1 in adapters:
+        n_ways[0] = 1
+    if 2 in adapters:
+        n_ways[1] = 1 + n_ways[0]
+    if 3 in adapters:
+        n_ways[2] = 1 + n_ways[1] + n_ways[0]
+
+    for i, val in enumerate(n_ways[3:], start=3):
+        if i + 1 in adapters:
+            n_ways[i] = n_ways[i - 1] + n_ways[i - 2] + n_ways[i - 3]
+
+    return n_ways[-1]
+
+
+# ---- Below is my attempt before learning the concept of dynamic programming ----
+# It works on the test data, but there are way too many iterations required 
 def powerset(iterable):
     """powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)
     Copied from the Itertools Recipes
@@ -109,7 +131,10 @@ if __name__ == "__main__":
     assert solve2(test_data) == 8
     assert solve2(additional_test_data) == 19208
 
+    assert solve2_dynamic_programming(test_data) == 8
+    assert solve2_dynamic_programming(additional_test_data) == 19208
+
     puz10 = Puzzle(2020, 10)
     data = puz10.input_data
     puz10.answer_a = solve1(data)
-    # puz10.answer_b = solve2(data)
+    puz10.answer_b = solve2_dynamic_programming(data)
