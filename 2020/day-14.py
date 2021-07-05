@@ -25,18 +25,18 @@ class Computer:
         self.memory = {}
         self.mask = ""
 
-    def apply_mask(self, value, mask):
+    def apply_mask_V1(self, value, mask):
         bits = bin(int(value))[2:].zfill(36)
         return "".join(
             [m if not m == "X" else b for b, m in zip(list(bits), list(mask))]
         )
 
-    def initialize(self):
+    def initialize_V1(self):
         for instr in self.program:
             if instr.command == "mask":
                 self.mask = instr.value
             elif instr.command == "mem":
-                self.memory[instr.address] = self.apply_mask(instr.value, self.mask)
+                self.memory[instr.address] = self.apply_mask_V1(instr.value, self.mask)
             else:
                 RuntimeError()
 
@@ -44,7 +44,7 @@ class Computer:
 def solve1(input_data):
     program = [Instruction.from_line(line) for line in input_data.strip().split("\n")]
     computer = Computer(program)
-    computer.initialize()
+    computer.initialize_V1()
     return sum(int(v, 2) for v in computer.memory.values())
 
 

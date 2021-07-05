@@ -94,3 +94,10 @@ if __name__ == "__main__":
     data = puz8.input_data
     puz8.answer_a = solve1(data)
     puz8.answer_b = solve2(data)
+
+
+    with open('2020/inputs/Day8_tanakov.txt') as f:
+        inputs = f.read()
+        print(solve1(inputs))
+        print(solve2(inputs))
+
