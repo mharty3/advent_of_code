@@ -42,9 +42,26 @@ def solve1(puzzle_input):
         position = step(position, direction_facing, inst_step)
     return manhattan_dist(position)
 
+
+def solve2(puzzle_input):
+    instructions = parse(puzzle_input)
+    direction_facing = 0
+    position = (0, 0)
+    positions_visited = {(0,0)}
+    for inst_turn, inst_step in instructions:
+        direction_facing = turn(direction_facing, inst_turn)
+        for i in range(inst_step):
+            position = step(position, direction_facing, 1)
+            if position in positions_visited:
+                return manhattan_dist(position)
+            else:
+                positions_visited.add(position)
+
 assert solve1('R2, L3') == 5
 assert solve1('R2, R2, R2') == 2
 assert solve1('R5, L5, R5, R3') == 12
+
+assert solve2('R8, R4, R4, R8') == 4
 
 if __name__ == '__main__':
     from aocd.models import Puzzle
@@ -53,4 +70,7 @@ if __name__ == '__main__':
 
     print(answer_1)
     puzzle.answer_a = answer_1
+
+    answer_2 = solve2(puzzle.input_data)
+    puzzle.answer_b = answer_2
 
