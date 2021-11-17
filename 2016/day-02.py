@@ -8,7 +8,7 @@ def parse(input_data: str) -> List[List[str]]:
     return directions
 
 
-def move(x, y, direction):
+def move1(x, y, direction):
     if direction == 'U':
         y -= 1
     elif direction == 'D':
@@ -25,6 +25,25 @@ def move(x, y, direction):
 
     return x, y
 
+def move2(x, y, direction, keypad):
+    last_x = x
+    last_y = y
+
+    if direction == 'U':
+        y -= 1
+    elif direction == 'D':
+        y += 1
+    elif direction == 'L':
+        x -= 1
+    elif direction == 'R':
+        x += 1
+
+
+    if keypad[x][y] == '-':
+        return last_x, last_y
+    else:
+        return x, y
+
 
 def solve1(input_data: str) -> str:
     keypad = [[1, 2, 3],
@@ -37,9 +56,28 @@ def solve1(input_data: str) -> str:
     keycode = []
     for line in parse(input_data):
         for direction in line:
-            x, y = move(x, y, direction)
-
+            x, y = move1(x, y, direction)
         keycode.append(str(keypad[y][x]))
+    return ''.join(keycode)
+
+
+def solve2(input_data):
+    keypad = [['-', '-', '-', '-', '-', '-', '-'],
+              ['-', '-', '-', '1', '-', '-', '-'],
+              ['-', '-', '2', '3', '4', '-', '-'],
+              ['-', '5', '6', '7', '8', '9', '-'],
+              ['-', '-', 'A', 'B', 'C', '-', '-'],
+              ['-', '-', '-', 'D', '-', '-', '-'],
+              ['-', '-', '-', '-', '-', '-', '-']]
+
+    x = 1
+    y = 3
+
+    keycode = []
+    for line in parse(input_data):
+        for direction in line:
+            x, y = move2(x, y, direction, keypad)
+        keycode.append(keypad[y][x])
     return ''.join(keycode)
 
 test_data = """ULL
@@ -48,6 +86,7 @@ LURDL
 UUUUD"""
 
 assert solve1(test_data) == '1985'
+assert solve2(test_data) == '5DB3'
 
 if __name__ == '__main__':
     from aocd.models import Puzzle
@@ -57,5 +96,5 @@ if __name__ == '__main__':
     print(answer_1)
     puzzle.answer_a = answer_1
 
-    # answer_2 = solve2(puzzle.input_data)
-    # puzzle.answer_b = answer_2
+    answer_2 = solve2(puzzle.input_data)
+    puzzle.answer_b = answer_2
