@@ -69,18 +69,24 @@ def solve1(input_data):
             screen = rotate_row(instruction.idx, instruction.shift, screen)
         elif instruction.inst_type == 'rotate_col':
             screen = rotate_column(instruction.idx, instruction.shift, screen)
-    return int(screen.sum())
+    return screen, int(screen.sum())
 
-
+def solve2(input_data):
+    screen = solve1(input_data)[0]
+    for row in screen:
+        for col in row:
+            if col:
+                print( ' # ', end='')
+            else:
+                print('   ', end='')
+        print('\n')
 
 if __name__ == '__main__':
     from aocd.models import Puzzle
     puzzle = Puzzle(2016, 8)
     answer_1 = solve1(puzzle.input_data)
 
-    print(answer_1)
-    puzzle.answer_a = answer_1
+    print(answer_1[1])
+    puzzle.answer_a = answer_1[1]
 
-    # answer_2 = solve2(puzzle.input_data)
-    # print(answer_2)
-    # puzzle.answer_b = answer_2
+    solve2(puzzle.input_data)
