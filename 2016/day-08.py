@@ -79,7 +79,7 @@ def solve2(input_data):
                 print( ' # ', end='')
             else:
                 print('   ', end='')
-        print('\n')
+        print()
 
 if __name__ == '__main__':
     from aocd.models import Puzzle
@@ -90,3 +90,12 @@ if __name__ == '__main__':
     puzzle.answer_a = answer_1[1]
 
     solve2(puzzle.input_data)
+
+# answer part 2
+
+ #  #  #  #        #  #           #  #        #  #  #           #  #        #  #  #        #        #     #           #     #  #           #  #       
+ #              #        #     #        #     #        #     #        #     #        #     #        #     #           #  #        #     #        #    
+ #  #  #        #        #     #        #     #        #     #              #        #     #  #  #  #        #     #     #        #     #        #    
+ #              #        #     #  #  #  #     #  #  #        #     #  #     #  #  #        #        #           #        #  #  #  #     #        #    
+ #              #        #     #        #     #     #        #        #     #              #        #           #        #        #     #        #    
+ #  #  #  #        #  #        #        #     #        #        #  #  #     #              #        #           #        #        #        #  #     
