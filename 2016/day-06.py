@@ -41,14 +41,3 @@ enarar"""
 assert solve1(test_data) == 'easter'
 assert solve2(test_data) == 'advent'
 
-if __name__ == '__main__':
-    from aocd.models import Puzzle
-    puzzle = Puzzle(2016, 6)
-    answer_1 = solve1(puzzle.input_data)
-
-    print(answer_1)
-    puzzle.answer_a = answer_1
-
-    answer_2 = solve2(puzzle.input_data)
-    print(answer_2)
-    puzzle.answer_b = answer_2
