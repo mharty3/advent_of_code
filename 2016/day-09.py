@@ -51,7 +51,7 @@ def solve1(input_data):
 def sequence_contains_marker(sequence:str) -> bool:
     return '(' in sequence
 
-def split_marker_sequence(sequence:str) -> Tuple[Tuple[int, int], str]:
+def split_marker_sequence(sequence:str) -> Tuple[Tuple[int, int], str, int]:
     i = 0
     while i < len(sequence):
         idx = i + 1
@@ -60,25 +60,34 @@ def split_marker_sequence(sequence:str) -> Tuple[Tuple[int, int], str]:
             marker += sequence[idx]
             idx += 1
         look_ahead, repeat_count = marker.split('x')
-        return (int(look_ahead), int(repeat_count)), sequence[idx+1:]
+        return (int(look_ahead), int(repeat_count)), sequence[idx+1:idx+1+int(look_ahead)], len(marker)+2
 
 def length(sequence:str) -> int:
-    if sequence.startswith('('):
-        marker, sequence = split_marker_sequence(sequence)
-        if not sequence_contains_marker(sequence):
-            return marker[1] * len(sequence)
+    i = 0
+    out_of_marker = 0
+    total = 0
+    sub_sequence = sequence
+    while i < len(sequence):
+        if not sequence[i] == '(':
+            out_of_marker += 1
+            i += 1
         else:
-            return marker[1] * length(sequence)
+            marker, sub_sequence, len_marker = split_marker_sequence(sub_sequence[i:])
+            if not sequence_contains_marker(sub_sequence):
+                i += marker[0] + len_marker
+                total +=  marker[1] * len(sub_sequence)
+            else:
+                i += marker[0] + len_marker
+                total += marker[1] * length(sub_sequence)
+    return total + out_of_marker
 
 
-print('(20x12)(13x14)(7x10)(1x12)A')
-print(length('(20x12)(13x14)(7x10)(1x12)A'))
 
 # passing
 assert length('(3x3)XYZ') == 9 # still becomes XYZXYZXYZ, as the decompressed section contains no markers.
 assert length('(27x12)(20x12)(13x14)(7x10)(1x12)A') == 241920 # decompresses into a string of A repeated 241920 times.
-# failing
 assert length('X(8x2)(3x3)ABCY') == 20 # becomes XABCABCABCABCABCABCY, because the decompressed data from the (8x2) marker is then further decompressed, thus triggering the (3x3) marker twice for a total of six ABC sequences.
+# failing
 assert length('(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN') == 445 # becomes 445 characters long.
 
 if __name__ == '__main__':
