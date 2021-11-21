@@ -72,7 +72,7 @@ def length(sequence:str) -> int:
             out_of_marker += 1
             i += 1
         else:
-            marker, sub_sequence, len_marker = split_marker_sequence(sub_sequence[i:])
+            marker, sub_sequence, len_marker = split_marker_sequence(sequence[i:])
             if not sequence_contains_marker(sub_sequence):
                 i += marker[0] + len_marker
                 total +=  marker[1] * len(sub_sequence)
@@ -82,12 +82,10 @@ def length(sequence:str) -> int:
     return total + out_of_marker
 
 
-
 # passing
 assert length('(3x3)XYZ') == 9 # still becomes XYZXYZXYZ, as the decompressed section contains no markers.
 assert length('(27x12)(20x12)(13x14)(7x10)(1x12)A') == 241920 # decompresses into a string of A repeated 241920 times.
 assert length('X(8x2)(3x3)ABCY') == 20 # becomes XABCABCABCABCABCABCY, because the decompressed data from the (8x2) marker is then further decompressed, thus triggering the (3x3) marker twice for a total of six ABC sequences.
-# failing
 assert length('(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN') == 445 # becomes 445 characters long.
 
 if __name__ == '__main__':
@@ -98,43 +96,5 @@ if __name__ == '__main__':
     print(answer_1)
     puzzle.answer_a = answer_1
 
-    # solve2(puzzle.input_data)
-    # # puzzle.answer_b = answer_2
+    puzzle.answer_b = length(puzzle.input_data)
 
-
-
-# some failed attempts below
-
-# def text_to_tree(text):    
-#     t = []
-#     i = 0
-#     non_compressed_count = 0
-#     while i < len(text):
-#         if text[i] == '(':
-#             idx = i + 1
-#             marker = ''
-#             while text[idx] != ')':
-#                 marker += text[idx]
-#                 idx += 1
-            
-#             look_ahead, repeat_count = marker.split('x')
-
-#             sequence = ''
-#             for j in range(int(look_ahead)):
-#                 j += 1
-#                 sequence += text[idx + j]
-#             t.append((int(repeat_count), sequence))
-#             i = idx + int(look_ahead) + 1
-
-#         else:
-#             non_compressed_count += 1
-#             i += 1
-
-#     t.append((non_compressed_count, 1))
-#     return t
-
-# t = text_to_tree(document)
-
-# # for i, node in enumerate(t):
-# #     if type(node[1]) == str:
-# #         t[i] = (node[0], text_to_tree(node[1]))
