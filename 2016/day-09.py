@@ -30,18 +30,12 @@ def decompress(document):
     return decompressed
 
 
-# def decompressed_length(document):
-
-
-
 assert decompress('ADVENT') == 'ADVENT' # 6
 assert decompress('A(1x5)BC') == 'ABBBBBC' # 7  (n_non_markers + look_ahead*repeat) - look_ahead) = 3 + (1*5) - 1 = 7
 assert decompress('(3x3)XYZ') == 'XYZXYZXYZ' # 9
 assert decompress('A(2x2)BCD(2x2)EFG') == 'ABCBCDEFEFG' # 11
 assert decompress('(6x1)(1x3)A') == '(1x3)A' # 6
 assert decompress('X(8x2)(3x3)ABCY') == 'X(3x3)ABC(3x3)ABCY' # 18
-
-#
 
 
 def solve1(input_data):
@@ -52,6 +46,11 @@ def sequence_contains_marker(sequence:str) -> bool:
     return '(' in sequence
 
 def split_marker_sequence(sequence:str) -> Tuple[Tuple[int, int], str, int]:
+    """Returns tuple of 4 values:
+        - first value of marker (look_ahead)
+        - second value of marker (repeat count)
+        - number of characters in the marker for advancing string index
+    """
     i = 0
     while i < len(sequence):
         idx = i + 1
@@ -62,23 +61,25 @@ def split_marker_sequence(sequence:str) -> Tuple[Tuple[int, int], str, int]:
         look_ahead, repeat_count = marker.split('x')
         return (int(look_ahead), int(repeat_count)), sequence[idx+1:idx+1+int(look_ahead)], len(marker)+2
 
+
 def length(sequence:str) -> int:
     i = 0
     out_of_marker = 0
     total = 0
-    sub_sequence = sequence
-    while i < len(sequence):
-        if not sequence[i] == '(':
+    
+    while i < len(sequence): # iterate along document
+        if not sequence[i] == '(': # account for chars that don't need to be expanded
             out_of_marker += 1
             i += 1
-        else:
+        else: 
             marker, sub_sequence, len_marker = split_marker_sequence(sequence[i:])
-            if not sequence_contains_marker(sub_sequence):
+            if not sequence_contains_marker(sub_sequence): # self contained marker sequence
                 i += marker[0] + len_marker
                 total +=  marker[1] * len(sub_sequence)
-            else:
+            else: # go deeper
                 i += marker[0] + len_marker
                 total += marker[1] * length(sub_sequence)
+    
     return total + out_of_marker
 
 
