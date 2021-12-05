@@ -8,7 +8,7 @@ def parse(input_data):
 
 def solve1(input_data):
     sonar = parse(input_data)
-    deltas = [x - x_next for x, x_next in zip(sonar[1:], sonar[:-1])]
+    deltas = [x - x_prev for x, x_prev in zip(sonar[1:], sonar)]
     return sum([d > 0 for d in deltas])
 
 
