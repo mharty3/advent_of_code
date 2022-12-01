@@ -4,48 +4,61 @@ https://adventofcode.com/2019/day/2
 """
 
 class Computer():
-    def __init__(self, program):
-        self.program = program
-        self.position = 0
+    def __init__(self, memory, noun, verb):
+        self.memory = memory
+        self.memory[1] = noun
+        self.memory[2] = verb
+        self.address = 0
 
 
     def add(self):
-        pos_1 = self.program[self.position + 1]
-        pos_2 = self.program[self.position + 2]
-        pos_to_update = self.program[self.position + 3]
-        self.program[pos_to_update] = self.program[pos_1] + self.program[pos_2]
+        address_1 = self.memory[self.address + 1]
+        address_2 = self.memory[self.address + 2]
+        address_to_update = self.memory[self.address + 3]
+        self.memory[address_to_update] = self.memory[address_1] + self.memory[address_2]
     
 
     def multiply(self):
-        pos_1 = self.program[self.position + 1]
-        pos_2 = self.program[self.position + 2]
-        pos_to_update = self.program[self.position + 3]
-        self.program[pos_to_update] = self.program[pos_1] * self.program[pos_2]
+        address_1 = self.memory[self.address + 1]
+        address_2 = self.memory[self.address + 2]
+        address_to_update = self.memory[self.address + 3]
+        print(address_to_update)
+        self.memory[address_to_update] = self.memory[address_1] * self.memory[address_2]
     
 
     def run(self):
-        while self.program[self.position] != 99:
-            op_code = self.program[self.position]
+        while self.memory[self.address] != 99:
+            op_code = self.memory[self.address]
             if op_code == 1:
                self.add()
             if op_code == 2:
                 self.multiply()
-            self.position += 4
-        return self.program[0]
+            self.address += 4
+        return self.memory[0]
 
     
-c = Computer([2, 3, 0, 3, 99])
+c = Computer([2, 3, 0, 3, 99], 3, 0)
 c.run()
 
 def parse(input_data):
     return [int(val) for val in input_data.split(',')]
 
 def solve1(input_data):
-    program = parse(input_data)
-    program[1] = 12
-    program[2] = 2
-    c = Computer(program)
+    memory = parse(input_data)
+    c = Computer(memory, 12, 2)
     return c.run()
+
+def solve2(input_data):
+    memory = parse(input_data)
+    for noun in range(500):
+        for verb in range(500):
+            print(noun, verb)
+            c = Computer(memory, noun, verb)
+            output = c.run()
+            print(output)
+            if output == 19690720:
+                return noun, verb
+    raise ValueError
 
 
 if __name__ == '__main__':
@@ -55,6 +68,6 @@ if __name__ == '__main__':
     print(answer_1)
     puzzle.answer_a = answer_1
 
-    # answer_2 = solve2(puzzle.input_data)
-    # print(answer_2)
+    answer_2 = solve2(puzzle.input_data)
+    print(answer_2)
     # puzzle.answer_b = answer_2
