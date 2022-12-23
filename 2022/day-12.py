@@ -7,6 +7,7 @@ def parse(input_data):
     val_map['S'] = 0
     val_map['E'] = 25
     edges = dict()
+    potential_starting_pts = [] # for pt 2
 
     # Parse input into list of lists
     grid = [
@@ -29,6 +30,10 @@ def parse(input_data):
             else:
                 h = val_map[col]
 
+            # for part 2
+            if col == 'a':
+                potential_starting_pts.append((r, c))
+
             potential_neighbors = [(r+1, c), (r-1, c), (r, c-1), (r, c+1)]
             valid_neighbors = []
             for neighbor in potential_neighbors:
@@ -39,15 +44,30 @@ def parse(input_data):
                         valid_neighbors.append(neighbor)
             edges[(r, c)] = valid_neighbors
     
-    return edges, start, end
+    return edges, start, end, potential_starting_pts
 
 
 def solve1(input_data: str) -> int:
-    edges, start, end = parse(input_data)
+    edges, start, end, _ = parse(input_data)
     # create a directed graph from the dict of edges
     graph = nx.DiGraph(edges)
     # use networkx to find the shortest path
-    return(nx.shortest_path_length(graph, source=start, target=end))
+    return nx.shortest_path_length(graph, source=start, target=end)
+
+
+def solve2(input_data):
+    edges, _, end, starts = parse(input_data)
+    # create a directed graph from the dict of edges
+    graph = nx.DiGraph(edges)
+    path_lengths = []
+    for start in starts:
+        try:
+            path_lengths.append(nx.shortest_path_length(graph, source=start, target=end))
+        except: # no path found
+            pass
+    
+    return min(path_lengths)
+
 
 
 if __name__ == '__main__':
@@ -63,8 +83,12 @@ if __name__ == '__main__':
     
     puzzle = Puzzle(2022, 12)
     assert solve1(sample_data) == 31
+    assert solve2(sample_data) == 29
 
     answer_1 = solve1(puzzle.input_data)
     print(answer_1)
     puzzle.answer_a = answer_1
- 
+
+    answer_2 = solve2(puzzle.input_data)
+    print(answer_2)
+    puzzle.answer_b = answer_2
