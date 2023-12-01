@@ -24,19 +24,25 @@ def solve2(input_data):
     return solve1(input_data)
 
 
-def solve2(input_data):
+def solve2_regex(input_data):
     """
     second try.
-    this doesn't work but I don't know why. It works fine on test data ¯\_(ツ)_/¯
+    this doesn't work with my original pattern but I don't know why.
+    It works fine on test data ¯\_(ツ)_/¯
+
+    update:
+    after I solved the problem with `solve2_iter`, I found out that re.findall() does not 
+    include overlaps. But with a 'lookahead expression', it will (https://stackoverflow.com/a/11430936)
     """
 
     pattern = '(one|two|three|four|five|six|seven|eight|nine|\d)'
+    right_pattern = '(?=(one|two|three|four|five|six|seven|eight|nine|\d))'
     text_digits = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
     trans_table = {k: str(v) for k, v in zip(text_digits, range(1, 10))}
 
     total = 0
     for line in input_data.splitlines():
-        match = re.findall(pattern, line)
+        match = re.findall(right_pattern, line)
         print(line, match)
         
         first_d = trans_table.get(match[0], match[0])
@@ -46,7 +52,8 @@ def solve2(input_data):
         
     return total
 
-def solve2(input_data):
+
+def solve2_iter(input_data):
     """fine. I will try it this way"""
     calibration_values = []
     for line in input_data.splitlines():
@@ -108,7 +115,8 @@ zoneight234
 
 
     assert solve1(test) == 142  
-    assert solve2(test2) == 281
+    assert solve2_regex(test2) == 281
+    assert solve2_iter(test2) == 281
 
     puzzle = Puzzle(2023, 1)
     input_data = puzzle.input_data
@@ -116,6 +124,9 @@ zoneight234
     print(answer_1)
     puzzle.answer_a = answer_1
 
-    answer_2 = solve2(input_data)
-    print(answer_2)
-    puzzle.answer_b = answer_2 
+    answer_2_regex = solve2_regex(input_data)
+    answer_2_iter = solve2_iter(input_data)
+    assert answer_2_iter == answer_2_regex
+    
+    print(answer_2_regex)
+    puzzle.answer_b = answer_2_regex
