@@ -18,20 +18,15 @@ def score_hand(hand):
     1p  : 2
     hk  : 0
     """
-    
+
     card_counts = Counter(hand)
     most_common_count = card_counts.most_common()[0][1]
-    score = (most_common_count - 1) * 2
     
-    print(card_counts)
-
+    score = (most_common_count - 1) * 2
     if score == 4 and 2 in card_counts.values(): # full house
         score += 1
-
-    elif score == 2 and card_counts.most_common()[1][1] == 2:
+    elif score == 2 and card_counts.most_common()[1][1] == 2: # two pair
         score += 1
-
-    print(str(score) + hand)
 
     return int(str(score) + hand, 15)
 
