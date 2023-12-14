@@ -1,23 +1,7 @@
+import numpy as np
 from aocd.models import Puzzle
 puzzle = Puzzle(2023, 13)
-input_data = puzzle.input_data
 
-
-test1 = """#.##..##.
-..#.##.#.
-##......#
-##......#
-..#.##.#.
-..##..##.
-#.#.##.#."""
-
-test2 = """#...##..#
-#....#..#
-..##..###
-#####.##.
-#####.##.
-..##..###
-#....#..#"""
 
 def parse(input_data):
     data = []
@@ -27,57 +11,41 @@ def parse(input_data):
     return data
 
 
-def single_line_reflections(row):
-    reflections = set()
+def reflect(row, smudges=0):
+    non_matches_count = []
     for i, _ in enumerate(row):
-        # if i < len(row) // 2:
-        #     continue
-
         left = row[i-1::-1]
         right = row[i:]
 
-        for l, r in zip(left, right):
-            # print(l, r)
-            if l != r:
-                # print('breaking')
-                break
-        else:
-            # print(left, right)
-            # print(i)
-            reflections.add(i)
-    return reflections
+        smudges = len([(l, r) for l, r in zip(left, right) if l != r])
+        non_matches_count.append(smudges)
+
+    return non_matches_count
 
 
-
-def single_line_reflections(row, smudges=0):
-    reflections = set()
-    for i, _ in enumerate(row):
-
-        left = row[i-1::-1]
-        right = row[i:]
-
-        if len([(l, r) for l, r in zip(left, right) if l != r]) == 0:
-            reflections.add(i)
-
-    return reflections
-
-
-def score_map(map_,):
-    v_reflections = []
+def score_map(map_, smudges=0):
+    a = []
     for row in map_:
-        v_reflections.append(single_line_reflections(row))
-    v_plane = set.intersection(*v_reflections)
-    if v_plane:
-        return min(v_plane)
+        a.append(reflect(row))
+    A = np.array(a)
 
-    h_reflections = []
-    for col in zip(*map_):
-        h_reflections.append(single_line_reflections(col))
-    h_plane = set.intersection(*h_reflections)
-    if h_plane:
-        return min(h_plane) * 100
+    if np.any(A.sum(axis=0)==smudges):
+        c = (A.sum(axis=0)==smudges).nonzero()[0][0]
+        return c
+
+    else:
+        a = []
+        for row in zip(*map_):
+            a.append(reflect(row))
+        A = np.array(a)
+        r = (A.sum(axis=0)==smudges).nonzero()[0][0]
+        return r * 100
 
 
-def solve1(input_data):
-    return sum([score_map(m) for m in parse(input_data) if score_map(m)])
+def solve(input_data, smudges=0):
+    return sum([score_map(m, smudges) for m in parse(input_data)])
 
+
+input_data = puzzle.input_data
+puzzle.answer_a = solve(input_data)
+puzzle.answer_b = solve(input_data, smudges=1)
