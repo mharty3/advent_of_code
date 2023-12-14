@@ -2,8 +2,6 @@ from aocd.models import Puzzle
 puzzle = Puzzle(2023, 13)
 input_data = puzzle.input_data
 
-row = [0,1,2,3,4,5,6,7,8]
-row = list('#.##..##.')
 
 test1 = """#.##..##.
 ..#.##.#.
@@ -83,24 +81,3 @@ def score_map(map_,):
 def solve1(input_data):
     return sum([score_map(m) for m in parse(input_data) if score_map(m)])
 
-test_data = """#.##..##.
-..#.##.#.
-##......#
-##......#
-..#.##.#.
-..##..##.
-#.#.##.#.
-
-#...##..#
-#....#..#
-..##..###
-#####.##.
-#####.##.
-..##..###
-#....#..#
-"""
-
-# too low 23837
-
-# pt 2
-# too low 2509
