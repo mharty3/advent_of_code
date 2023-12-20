@@ -91,3 +91,104 @@ def solve1(input_data):
 
     return sum([p['x'] + p['m'] + p['a'] + p['s'] for p in accepted_parts])
 
+
+
+class Node:
+
+    def __init__(self, value = None):
+        self.left  = None
+        self.right = None
+        self.value = value
+
+
+class DecisionNode:
+
+    def __init__(self, left=None, right=None, left_name=None, right_name=None,
+                 attribute=None, threshold=None, 
+                 x_range=(0, 4000), m_range=(0, 4000), a_range=(0, 4000), s_range=(0, 4000)):
+        
+        self.left  = left
+        self.right = right
+
+        self.left_name = left_name
+        self.right_name = right_name
+
+        self.name = None
+
+        self.attribute = attribute
+        self.threshold = threshold
+
+        self.x_range = x_range
+        self.m_range = m_range
+        self.a_range = a_range
+        self.s_range = s_range
+
+    def __repr__(self):
+        return f"{{{self.attribute}<{self.threshold}:{self.left},{self.right}}}"
+    
+def printInorder(root):
+
+    if root:
+
+        # First recur on left child
+        printInorder(root.left)
+
+        # Then print the data of node
+        print(root, end=" "),
+
+        # Now recur on right child
+        printInorder(root.right)
+        
+
+nodes = {}
+
+nodes['in'] = DecisionNode(attribute='s', threshold=1351, left_name='px', right_name='qqz')
+nodes['px'] = DecisionNode(attribute='a', threshold=2006, left_name='qkq', right=DecisionNode(attribute='m', threshold=2090, right_name='A', left_name='rfg'))
+
+test_data = """
+
+in{s<1351:px,qqz}
+px{a<2006:qkq,m>2090:A,rfg}
+qs{s>3448:A,lnx}
+qkq{x<1416:A,crn}
+hdj{m>838:A,pv}
+
+rfg{s<537:gd,x>2440:R,A}
+lnx{m>1548:A,A}
+pv{a>1716:R,A}
+
+crn{x>2662:A,R}
+gd{a>3333:R,R}
+qqz{s>2770:qs,m<1801:hdj,R}
+
+{x=787,m=2655,a=1222,s=2876}
+{x=1679,m=44,a=2067,s=496}
+{x=2036,m=264,a=79,s=2244}
+{x=2461,m=1339,a=466,s=291}
+{x=2127,m=1623,a=2188,s=1013}"""
+
+r"""
+                                    in{s<1351:px,qqz}
+                         /                                  \
+px{a<2006:qkq,m>2090:A,rfg}                                        qqz{s>2770:qs,m<1801:hdj,R}
+       /            |      \                                        /             |               \
+qkq{x<1416:A,crn}   A       rfg{s<537:gd,x>2440:R,A}         qs{s>3448:A,lnx}    hdj{m>838:A,pv}    R
+    /    \                         /          |   \             /         \                 /  \
+   A     crn{x>2662:A,R}     gd{a>3333:R,R}   R    A           A       lnx{m>1548:A,A}     A  pv{a>1716:R,A}
+            /  \                 /   \                                      /  \
+           A    R               R     R                                    A    A
+
+        
+
+           
+           
+
+            s < 1351        
+              /  \
+            qqz    a < 2006
+                     /    \
+                 m < 2090   qkq
+                   /  \
+                rfg    A 
+
+              """
