@@ -100,8 +100,6 @@ grid = SquareGrid.parse(input_data)
 d = grid.to_dict()
 
 G = nx.DiGraph(d)
-# for p in nx.all_simple_paths(G, grid.start, grid.end):
-#     print(len(p))
 
 ml = max([len(p) for p in nx.all_simple_paths(G, grid.start, grid.end)])
 answer_a = ml - 1
